@@ -1,4 +1,4 @@
-# Programmation objet : gestion de compte bancaire
+# Programmation objet : gestion d'employée
 
 ## Objectifs d'apprentissage
 
