@@ -1,54 +1,86 @@
 package fr.afpa.employees;
 
-//import java.time.LocalDate;
+import java.time.LocalDate;
+import java.util.ArrayList;
 //import java.time.temporal.ChronoUnit;
 
-/**
- * Classe principale du projet, contient la fonction "main"
- */
-class EmployeeMain {
-	public static void main(String[] args) {
-		System.out.println("\n----- Exercice de programmation objet - classe \"Employee\" -----");
 
-		// instanciez 4 objets de la classe "Employee" (une fois celle-ci implémentée)
-		Employee employee1 = new Employee(": 11ABC22", ": Don", ": Michel", 2000);
-		employee1.getbirtDate();
-		System.out.println(employee1.getRegistrationNumber());
-		Employee employee2 = new Employee(": 125FE78", ": Zannese", ": Aurélie", 2000);
-		System.out.println(employee2.getRegistrationNumber());
-		Employee employee3 = new Employee(": 98BN15", ": Sanchez", ": Michel", 2000);
-		System.out.println(employee3.getRegistrationNumber());
-		Employee employee4 = new Employee(" : 75AZ23", "Don", "Michel", 2000);
-		System.out.println(employee4.getRegistrationNumber());
+public class EmployeeMain {
+    public static void main(String[] args) {
 
-		System.out.println(employee1.toString());
-		// Modification de la variable registrationNumber grace au Setter de la classe
-		// Employee, nouvelle donnée attribuer à registrationNumber
-		employee1.setRegistrationNumber("123456789");
-		System.out.println(employee1.getRegistrationNumber());
+        System.out.println("\n----- Exercice de programmation objet - classe \"Employee\" -----");
 
-		// Déclaration d'une String
-		//String testString = "123"; // appel au constructeur de string implicite
+        LocalDate birthDate1 = LocalDate.of(1980, 5, 15); //"1980-05-15"
+        LocalDate birthDate2 = LocalDate.of(1990, 7, 20); //"1990-07-20"
+        LocalDate birthDate3 = LocalDate.of(1985, 3, 10); //"1985-03-10"
+        LocalDate birthDate4 = LocalDate.of(1995, 12, 25); //"1995-12-25"
+        System.out.println("Today's date: " + LocalDate.now());
 
-		// appel explicite au constructeur de String
-		//String otheString = new String("123");
+        // décalaration des variables employés
+        Employee emp1 = null; // null -> c'est vide
+        try {
+            // Instancier 4 objets Employee avec des informations différentes
+            emp1 = new Employee("125ZA45", "Doe", "John", 3000.0, birthDate1);
 
-		// Tentative de modification avec un matricule correctement formaté
-		employee1.setRegistrationNumber("64AZE88");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        Employee emp2 = null; // null -> c'est vide
+        try {
+            // Instancier 4 objets Employee avec des informations différentes
+            emp2 = new Employee("67ADF90", "Smith", "Jane", 3500.0, birthDate2);
+            
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
+        
+        Employee emp3 = null; // null -> c'est vide
+        try {
+            // Instancier 4 objets Employee avec des informations différentes
+            emp3 = new Employee("11BEA23", "Brown", "Cha8rlie", 3200.0, birthDate3);
+           
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
-		// test des matricules en erreur
-		employee1.setRegistrationNumber("EEAZE88");
+        Employee emp4 = null; // null -> c'est vide
+        try {
+            // Instancier 4 objets Employee avec des informations différentes
+            emp4 = new Employee("44AED56", "Jo5hnson", "Emma", 3100.0, birthDate4);
 
-		employee1.setRegistrationNumber("6444433");
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+        }
 
-		employee1.setRegistrationNumber("64AZ");
+        // Créer une liste d'employés
+        ArrayList<Employee> employees = new ArrayList<>();
 
-		employee1.setRegistrationNumber("6");
+        // Ajouter les employés à la liste
+        if (emp1 != null) {
+            employees.add(emp1);
+        }
+        if (emp2 != null) {
 
-		employee1.setRegistrationNumber("");
+            employees.add(emp2);
+        }
+        if (emp3 != null) {
+            employees.add(emp3);
 
-		employee1.setRegistrationNumber("987654");
-
-		// TODO afficher les informations des employés avec System.out.println
-	}
+        }
+        if (emp4 != null) {
+            employees.add(emp4);
+        }
+                
+        // Afficher la représentation en chaîne de caractères de chaque objet
+        for (Employee emp : employees) {
+            System.out.println(emp);
+            // Afficher le nom complet de chaque employé
+            System.out.println("Nom complet de " + emp.getRegistrationNumber() + " : " + emp.getFullName());
+            // Afficher le salaire net de chaque employé
+            System.out.println("Salaire net de " + emp.getRegistrationNumber() + " : " + emp.getNetSalary());
+            // Afficher le nombre de jours restant avant l'anniversaire de chaque employé
+            System.out.println("Jours avant l'anniversaire de " + emp.getRegistrationNumber() + " : " + emp.getDaysUntilBirthday());
+        }
+    }
 }

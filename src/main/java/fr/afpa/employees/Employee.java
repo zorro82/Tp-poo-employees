@@ -1,217 +1,190 @@
 package fr.afpa.employees;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
+import java.time.temporal.ChronoUnit;
+//import java.util.regex.Pattern;
 
-/*
-Objectif :
-L’objectif de ce TP est de concevoir un programme en console basé sur une approche objet et
-permettant de gérer (vraiment très basiquement) des salariés d’une entreprise.
+public class Employee {
+    private String registrationNumber;
+    private String lastName;
+    private String firstName;
+    private double salary;
+    private final int socialRate = 30; // Taux de charges sociales fixe
+    private LocalDate birthDate; // Date de naissance
 
-Vous allez écrire une classe représentant les salariés d'une entreprise.
-Vous pourrez vous aider du PDF disponible sur pour obtenir des informations sur la façon de faire.
-*/
+    // Constructeur avec paramètres
+    public Employee(String registrationNumber, String lastName, String firstName, double salary, LocalDate birthDate) throws Exception {
+        
+        boolean result1 = this.checkRegistrLationNumber(registrationNumber);
+        if (result1 == false) {
+            throw new Exception("Le paramètre d'entrée n'est pas correctement formaté." + registrationNumber);
+        }
 
-class Employee {
-	
-	// 1) Attributs :
-	/**
-	 * Matricule de l'employé
-	 */
+        if (!checkName(firstName)) {
+            throw new Exception("Le prénom ne doit pas être vide et ne doit pas contenir de chiffres." + registrationNumber);
+        }
 
-	// compléter les attributs comme présenté dans le PDF
-	// Permet de stock les informations à rentrer.
-	private String registrationNumber;
-	private String lastName;
-	private String fistName;
-	private double salaryBrut;
-	private final int socialRate = 30; // pour empêcher toute modification d’une variable
-	private LocalDate birtDate;
+        if (!checkName(lastName)) {
+            throw new Exception("Le nom ne doit pas être vide et ne doit pas contenir de chiffres." + registrationNumber);
+        }
+                
+        this.registrationNumber = registrationNumber;
+        this.lastName = lastName;
+        this.firstName = firstName;
+        this.salary = salary;
+        this.birthDate = birthDate;
+    }
 
+    // Getters (Accesseurs)
+    public String getRegistrationNumber() {
+        return registrationNumber;
+    }
 
-	// 2) Constructeurs :
-	// compléter le constructeur de la classe
-	public Employee(String registrationNumber, String lastName, String fistName,
-			double salary) {
-		this.registrationNumber = registrationNumber;
-		this.lastName = lastName;
-		this.fistName = fistName;
-		this.salaryBrut = salary;
+    public String getLastName() {
+        return lastName;
+    }
 
-		// this.socialRate = socialRate;
-	}
+    public String getFirstName() {
+        return firstName;
+    }
 
-	// 3) Getter / Setterss :
-	// implémenter les setters et getters de la classe (permet d'accéder aux
-	// attributs privés)
-	// MATRICULE
-	public String getRegistrationNumber() {
-		return registrationNumber;
-	}
+    public double getSalary() {
+        return salary;
+    }
 
-	public void setRegistrationNumber(String registrationNumber) {
-		this.registrationNumber = registrationNumber;
-	}
+    public int getSocialRate() {
+        return socialRate;
+    }
 
-	// NOM
-	public String getlastName() {
-		return lastName;
-	}
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
 
-	public void setlastName(String lastName) throws Exception {
-		this.lastName = lastName;
-	}
+    // Setters (Mutateurs)
+    public void setRegistrationNumber(String registrationNumber) {
+        this.registrationNumber = registrationNumber;
+    }
 
-	// PRENOM
-	public String getfistName() {
-		return fistName;
-	}
+    // Ici, il faudra implémenter l'algorithme de vérification pour matricule
+    /**
+     * Vérifie une chaîne de caractères et indique s'il s'agit d'un matricuel correctement formaté ou non
+     * @param inputToCheck1 La chaîne de caractère à vérifier
+     * @return VRAI s'il s'agit d'un matricule, FAUX sinon
+     */
+    private boolean checkRegistrLationNumber (String inputToCheck1) {
 
-	public void setfistName(String fistName) throws Exception {
-		this.fistName = fistName;
-	}
+        // Vérification de la taille de la chaîne de caractères
+        if (inputToCheck1.length() != 7) {
+            return false;
+        }
 
-	// SALAIRE
-	public double getsalary() {
-		return salaryBrut;
-	}
+        // déclaration du booléen qui va stocker le résultat de la vérification
+        // VRAI -> la chaîne de caractères passée en paramètre est un matricule correctement formaté
+        // FAUX -> la chaîne de caractères passée en paramètre est un matricule pas bien formaté
+        boolean isRegistrationNumber = false;
 
-	public void setsalary(double salary) throws Exception {
-		this.salaryBrut = salary;
-	}
+        // Cette première boucle permet de passer en revue TOUS les caractères de la chaîne
+        for (int index = 0; index < inputToCheck1.length(); index++) {
 
-	// ANNIVERSAIRE
-	public LocalDate getbirtDate() {
-		return this.birtDate;
-	}
+            char ch = inputToCheck1.charAt(index);
+            if (index == 0 || index == 1 || index == 5 || index == 6) {
 
-	public void setbirtDate(LocalDate birtDate) {
-		this.birtDate = birtDate;
-	}
+                // vérification du caractère, s'agit-il d'un chiffre ?
+                if (Character.isDigit(ch) == true) {
+                    isRegistrationNumber = true;
+                } else { // attention, ce n'est pas un chiffre
+                    return false;
+                }
 
-	/*
-	 * public String getsocialRate() {
-	 * return socialRate;
-	 * }
-	 * 
-	 * public void set socialRate(String socialRate) throws Exception {
-	 * this.socialRate = socialRate;
-	 * }
-	 */
+            } else { // cas de la position 2, 3 ou 4 -> vérification de letter
 
-	// TODO implémenter la méthode "toString()" qui renvoie une chaîne de caractère
-	// qui représente un objet de la classe employé
-	// plus d'information sur la méthode "toString()" ->
-	// https://codegym.cc/fr/groups/posts/fr.986.mthode-java-tostring
-	public String toString() {
-		return "Employee | "
-				+ " Matricule " + getRegistrationNumber()
-				+ " Nom " + getlastName()
-				+ " Prénom " + getfistName()
-				+ " Salaire " + getsalary()
-				// + " Date d'anniversaire " + get()
-				+ '|';
-	}
+                // Quelle opération dois-je faire ?
+                if (Character.isLetter(ch)) {
+                    isRegistrationNumber = true;
+                } else {
+                    return false;
+                }
+            }
+        } // fin du FOR
 
-	// Fonction pour obtenir le nom complet
-	public String fullName() {
-		return this.lastName + this.fistName;
-	}
+        return isRegistrationNumber;
+    } 
 
-	// Fonction pour calculer le salaire net
-	public double netSalary(double salary, final int socialRate) {
-		return  this.salaryBrut - this.salaryBrut * this.socialRate; //Salaire net = salaire brut – salaire brut * taux de charges sociales
-	}
+    public void setLastName(String lastName) throws Exception {
+        if (!checkName(lastName)) {
+            throw new Exception("Le nom ne doit pas être vide et ne doit pas contenir de chiffres.");
+        }
+        this.lastName = lastName;
+    }
 
-	// Fonction pour calculer le nombre de jours restant avant la date
-	// d'anniversaire
-	/*
-	 * public String dayBeforeBirthDate(int birtDate) {
-	 * //return this.lastName + this.fistName
-	 * }
-	 */
+    public void setFirstName(String firstName) throws Exception {
+        if (!checkName(firstName)) {
+            throw new Exception("Le prénom ne doit pas être vide et ne doit pas contenir de chiffres.");
+        }
+        this.firstName = firstName;
+    }
 
-	// Fonction pour calculer le salaire
-	/*
-	 * public double salary(double salary) {
-	 * //return this.lastName + this.fistName
-	 * }
-	 */
+    public void setSalary(double salary) {
+        this.salary = salary;
+    }
 
-	/**
-	 * Vérifie qu'une chaîne de caractères passée en paramètre est un prénom
-	 * 
-	 * Règles de vérification :
-	 * Un prénom ne doit pas comporter de chiffres, ni de caractère spéciale tel que
-	 * '#', '$', '%', '/, '\'
-	 * 
-	 * @param inputToCheck La chaîne de caractère à vérifier
-	 * @return VRAI s'il s'agit d'un prénom correctement formaté, FAUX sinon
-	 */
-	private boolean checkFirstName(String inputToCheck) {
+    public void setBirthDate(String birthDate) throws Exception {
+        if (!checkDate(birthDate)) {
+            throw new Exception("Le format de la date de naissance est incorrect.");
+        }
+        this.birthDate = LocalDate.parse(birthDate);
+    }
 
-		// déclaration du booléen qui va stocker le résultat de la vérification
-		// VRAI -> la chaîne de caractères passée en paramètre est un matricule
-		// correctement formaté
-		// FAUX -> la chaîne de caractères passée en paramètre est un matricule pas bien
-		// formaté
-		boolean isRegistrationNumber = false;
+    // Méthode pour obtenir le nom complet
+    public String getFullName() {
+        return lastName + " " + firstName;
+    }
 
-		for (int index = 0; index < inputToCheck.length(); index++) {
-			char value = inputToCheck.charAt(index);
-			System.out.println( value);
-		}
-		return isRegistrationNumber;
-	}
+    // Méthode pour calculer le salaire net
+    public double getNetSalary() {
+        return salary - salary * socialRate / 100;
+    }
 
-	// 4) Autres méthodes
-	/**
-	 * Vérifie une chaîne de caractères et indique s'il s'agit d'un matricuel
-	 * correctement formaté ou non
-	 * 
-	 * @param inputToCheck La chaîne de caractère à vérifier
-	 * @return VRAI s'il s'agit d'un matricule, FAUX sinon
-	 */
+    // Méthode pour calculer le nombre de jours restants avant l'anniversaire
+    public long getDaysUntilBirthday() {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate nextBirthday = birthDate.withYear(currentDate.getYear());
+        if (nextBirthday.isBefore(currentDate) || nextBirthday.isEqual(currentDate)) {
+            nextBirthday = nextBirthday.plusYears(1);
+        }
+        return ChronoUnit.DAYS.between(currentDate, nextBirthday);
+    }
 
-	private boolean checkRegistrationNumber(String inputToCheck) {
+    // Méthode toString()
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "registrationNumber='" + registrationNumber + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", firstName='" + firstName + '\'' +
+                ", salary=" + salary +
+                ", socialRate=" + socialRate +
+                ", birthDate=" + birthDate +
+                '}';
+    }
 
-		// Vérification de la taille de la chaîne de caractères
-		if (inputToCheck.length() != 7) {
-			return false;
-		}
+    // Méthodes de vérification
+    private boolean checkName(String name) {
+        return name != null && !name.trim().isEmpty() && name.matches("[a-zA-Z]+");
+    }
 
-		// déclaration du booléen qui va stocker le résultat de la vérification
-		// VRAI -> la chaîne de caractères passée en paramètre est un matricule
-		// correctement formaté
-		// FAUX -> la chaîne de caractères passée en paramètre est un matricule pas bien
-		// formaté
-		boolean isRegistrationNumber = false;
+    private boolean checkDate(String date) {
+        try {
+            LocalDate.parse(date);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
+    }
 
-		// Cette première boucle permet de passer en revue TOUS les caractères de la
-		// chaîne
-		for (int index = 0; index < inputToCheck.length(); index++) {
-			// index = longueur de intupToCheck - 1 = 6
-			char ch = inputToCheck.charAt(index);
-			if (index == 0 || index == 1 || index == 5 || index == 6) {
-
-				// vérification du caractère, s'agit-il d'un chiffre ?
-				if (Character.isDigit(ch) == true) {
-					isRegistrationNumber = true;
-				} else { // attention, ce n'est pas un chiffre
-					return false;
-				}
-
-			} else { // cas de la position 2, 3 ou 4 -> vérification de letter
-
-				// Quelle opération dois-je faire ?
-				if (Character.isLetter(ch)) {
-					isRegistrationNumber = true;
-				} else {
-					return false;
-				}
-			}
-		} // fin du FOR, BRAVO !
-
-		return isRegistrationNumber;
-	}
-
+    // La méthode de vérification du matricule peut être implémentée plus tard
+    // private boolean checkRegistrationNumber(String registrationNumber) {
+    //     return registrationNumber != null && registrationNumber.matches("\\d{2}[A-Z]{3}\\d{2}");
+    // }
 }
